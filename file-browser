@@ -6,7 +6,7 @@ import argparse
 import sys
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--root", required=True, type=pathlib.Path)
+parser.add_argument("root", nargs="?", default=".", type=pathlib.Path)
 parser.add_argument("--show-hidden", action="store_true")
 args = parser.parse_args()
 
@@ -25,30 +25,23 @@ json.dump(
                 "actions": [
                     (
                         {
-                            "type": "open-url",
-                            "url": f"file://{path.absolute()}",
+                            "type": "open",
+                            "target": f"{path.absolute()}",
                             "title": "Open File",
                         }
                         if path.is_file()
                         else {
-                            "type": "run-command",
-                            "command": "browse-files",
+                            "type": "run",
+                            "command": f"{sys.argv[0]} {path.absolute()}",
                             "title": "Browse Directory",
                             "with": {"root": str(path.absolute())},
                         }
                     ),
                     {
-                        "type": "copy-text",
+                        "type": "copy",
                         "title": "Copy Path",
-                        "shorcut": "ctrl+y",
+                        "shortcut": "ctrl+y",
                         "text": str(path.absolute()),
-                    },
-                    {
-                        "type": "run-command",
-                        "title": "Delete File",
-                        "shortcut": "ctrl+d",
-                        "command": "delete-file",
-                        "with": {"path": str(path.absolute())},
                     },
                 ],
             }
