@@ -34,7 +34,7 @@ json.dump(
                             "type": "run",
                             "command": f"{sys.argv[0]} {path.absolute()}",
                             "title": "Browse Directory",
-                            "with": {"root": str(path.absolute())},
+                            "onSuccess": "push",
                         }
                     ),
                     {
